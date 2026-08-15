@@ -1,4 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Server.Websockets;
+using System.Collections.Concurrent;
+using System.Net.WebSockets;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,17 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "Server API v1");
     });
 }
+
+
+//ws
+app.UseWebSockets();
+
+app.Map("/ws/agent/{nodeId}", async context =>
+{
+    var handler = context.RequestServices.GetRequiredService<AgentWebSocketHandler>();
+
+    await handler.HandleAsync(context);
+});
 
 
 // apply migrations at startup

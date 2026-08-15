@@ -12,5 +12,7 @@ namespace Shared.Models
         public string NodeId { get; set; } = "";
         public string Name { get; set; } = "";
         public string Secret { get; set; } = "";
+
+        public DateTime LastSeen { get; set; }
     }
 }
