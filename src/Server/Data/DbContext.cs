@@ -8,5 +8,5 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<Agent> Agents => Set<Agent>();
+    public DbSet<AgentNode> Agents => Set<AgentNode>();
 }
