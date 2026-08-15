@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="src/Agent/Agent.csproj" />
+  <Project Path="src/ClassLibrary1/Shared.csproj" />
   <Project Path="src/Server/Server.csproj" />
   <Project Path="src/ServerCli/ServerCli.csproj" />
 </Solution>
