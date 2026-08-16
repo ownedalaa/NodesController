@@ -16,6 +16,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
 
+// Register the WebSocket handler as a singleton
+builder.Services.AddSingleton<AgentWebSocketHandler>();
+
 // build
 var app = builder.Build();
 
@@ -40,7 +43,6 @@ app.Map("/ws/agent/{nodeId}", async context =>
 
     await handler.HandleAsync(context);
 });
-
 
 // apply migrations at startup
 using (var scope = app.Services.CreateScope())

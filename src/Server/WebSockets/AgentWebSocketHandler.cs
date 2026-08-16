@@ -53,17 +53,26 @@ public class AgentWebSocketHandler
                 Console.WriteLine($"[{nodeId}] {text}");
             }
         }
+        catch (WebSocketException)
+        {
+            Console.WriteLine($"{nodeId} connection lost");
+        }
         finally
         {
             connectedAgents.TryRemove(nodeId, out _);
 
             Console.WriteLine($"{nodeId} disconnected");
 
-            await socket.CloseAsync(
-                WebSocketCloseStatus.NormalClosure,
-                "bye",
-                CancellationToken.None
-            );
+            if (socket.State == WebSocketState.Open || socket.State == WebSocketState.CloseReceived)
+            {
+                await socket.CloseAsync(
+                    WebSocketCloseStatus.NormalClosure,
+                    "bye",
+                    CancellationToken.None
+                );
+            }
+
+            socket.Dispose();
         }
     }
 }
