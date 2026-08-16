@@ -28,7 +28,6 @@ public class AgentsController : ControllerBase
             NodeId = Guid.NewGuid().ToString(),
             Name = name,
             Secret = secret,
-            LastSeen = DateTime.Now,
         };
 
         _db.Agents.Add(agent);
@@ -39,26 +38,6 @@ public class AgentsController : ControllerBase
             agent.NodeId,
             Secret = secret
         });
-    }
-
-
-    [HttpPost("heartbeat")]
-    public async Task<IActionResult> Heartbeat(string nodeId, string secret)
-    {
-        var agent = await _db.Agents
-            .FirstOrDefaultAsync(a => a.NodeId == nodeId);
-
-        if (agent is null)
-            return NotFound();
-
-        if (agent.Secret != secret)
-            return Unauthorized();
-
-        agent.LastSeen = DateTime.UtcNow;
-
-        await _db.SaveChangesAsync();
-
-        return Ok();
     }
 }
 //public static class HashHelper

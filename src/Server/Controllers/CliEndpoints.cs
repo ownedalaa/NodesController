@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Server.Websockets;
 using Shared.Models;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,20 +25,8 @@ public class ServerController : ControllerBase
     //}
 
     [HttpGet("online")]
-    public async Task<IActionResult> GetOnlineAgents()
+    public async Task<List<string>> GetOnlineAgents()
     {
-        var cutoff = DateTime.UtcNow.AddSeconds(-30);
-
-        var agents = await _db.Agents
-            .Where(a => a.LastSeen >= cutoff)
-            .Select(a => new
-            {
-                a.NodeId,
-                a.Name,
-                a.LastSeen
-            })
-            .ToListAsync();
-
-        return Ok(agents);
+        return AgentWebSocketHandler.GetConnectedAgents();
     }
 }

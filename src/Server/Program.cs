@@ -41,7 +41,7 @@ app.Map("/ws/agent/{nodeId}", async context =>
 {
     var handler = context.RequestServices.GetRequiredService<AgentWebSocketHandler>();
 
-    await handler.HandleAsync(context);
+    await AgentWebSocketHandler.HandleAsync(context);
 });
 
 // apply migrations at startup

@@ -6,9 +6,9 @@ namespace Server.Websockets;
 
 public class AgentWebSocketHandler
 {
-    ConcurrentDictionary<string, WebSocket> connectedAgents = new ConcurrentDictionary<string, WebSocket>();
+    static ConcurrentDictionary<string, WebSocket> connectedAgents = new ConcurrentDictionary<string, WebSocket>();
 
-    public async Task HandleAsync(HttpContext context)
+    public static async Task HandleAsync(HttpContext context)
     {
         var nodeId = context.Request.RouteValues["nodeId"]?.ToString();
         
@@ -32,7 +32,7 @@ public class AgentWebSocketHandler
 
         var buffer = new byte[4096];
 
-        SendAsync(nodeId, "Hello from server!").Wait();
+        __SendAsync(nodeId, "Hello from server!").Wait();
 
         // receive and close handling
         try
@@ -79,7 +79,15 @@ public class AgentWebSocketHandler
         }
     }
 
-    private async Task SendAsync(string nodeId, string text)
+
+    public static List<string> GetConnectedAgents()
+    {
+        return connectedAgents.Keys.ToList();
+    }
+
+
+    //priv
+    private static async Task __SendAsync(string nodeId, string text)
     {
         var bytes = Encoding.UTF8.GetBytes(text);
 
