@@ -32,6 +32,9 @@ public class AgentWebSocketHandler
 
         var buffer = new byte[4096];
 
+        SendAsync(nodeId, "Hello from server!").Wait();
+
+        // receive and close handling
         try
         {
             while (socket.State == WebSocketState.Open)
@@ -75,5 +78,19 @@ public class AgentWebSocketHandler
             socket.Dispose();
         }
     }
-}
 
+    private async Task SendAsync(string nodeId, string text)
+    {
+        var bytes = Encoding.UTF8.GetBytes(text);
+
+        if (connectedAgents.TryGetValue(nodeId, out var socket))
+        {
+            await socket.SendAsync(
+                    bytes,
+            WebSocketMessageType.Text,
+            true,
+            CancellationToken.None
+        );
+        }
+    }
+}
