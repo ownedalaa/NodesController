@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Server.Controllers;
 
@@ -33,11 +34,11 @@ public class AgentsController : ControllerBase
         _db.Agents.Add(agent);
         await _db.SaveChangesAsync();
 
-        return Ok(new
+        return Content(JsonConvert.SerializeObject(new
         {
             agent.NodeId,
             Secret = secret
-        });
+        }));
     }
 }
 //public static class HashHelper

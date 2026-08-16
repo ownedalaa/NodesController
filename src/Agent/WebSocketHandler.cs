@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Shared.Classes.Commands;
+using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Agent
 {
@@ -21,11 +23,7 @@ namespace Agent
 
             var buffer = new byte[4096];
 
-
-            // send while conn is open
-            SendAsync(socket, "Hello from client!").Wait();
-
-
+            //SendAsync(socket, "Hello from client!").Wait();
 
             // receive
             while (socket.State == WebSocketState.Open)
@@ -47,7 +45,22 @@ namespace Agent
                     result.Count
                 );
 
-                Console.WriteLine($"Server says: {message}");
+                //Console.WriteLine($"Server says: {message}");
+                var command = JsonConvert.DeserializeObject<AgentCommand>(message);
+
+                if (command == null)
+                    return;
+
+                string responsePayload = "temp";
+
+                var response = JsonConvert.SerializeObject(new
+                {
+                    requestId = command.RequestId,
+                    success = true,
+                    payload = responsePayload
+                });
+
+                await SendAsync(socket, response);
             }
         }
 

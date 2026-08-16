@@ -29,4 +29,20 @@ public class ServerController : ControllerBase
     {
         return AgentWebSocketHandler.GetConnectedAgents();
     }
+
+    [HttpPost("execute")]
+    public async Task<IActionResult> SendCommand(string nodeId, string command, string? payload)
+    {
+        if (!AgentWebSocketHandler.IsAgentConnected(nodeId))
+            return NotFound("agent offline");
+
+        var response =
+            await AgentWebSocketHandler.SendCommandAsync(
+                nodeId,
+                command,
+                payload
+            );
+
+        return Ok(response);
+    }
 }

@@ -9,8 +9,16 @@ public enum CommandType
     Print
 }
 
-public record Command
+public record AgentCommand
 {
+    public string RequestId { get; set; } = "";
     public CommandType Type { get; set; }
     public string Payload { get; set; } = "";
+}
+public class CommandResponse
+{
+    public string RequestId { get; set; } = "";
+    public bool Success { get; set; }
+    public string? Payload { get; set; }
+    public string? Error { get; set; }
 }
