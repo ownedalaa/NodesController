@@ -4,16 +4,10 @@ using System.Text;
 
 namespace Shared.Classes.Commands;
 
-public enum CommandType
-{
-    Ping,
-    GetStatus
-}
-
 public record AgentCommand
 {
     public string RequestId { get; set; } = "";
-    public CommandType Type { get; set; }
+    public string Command { get; set; } = "";
     public string Payload { get; set; } = "";
 }
 public class CommandResponse

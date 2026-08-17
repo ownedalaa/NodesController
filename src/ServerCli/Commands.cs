@@ -21,13 +21,13 @@ class CommandHandler
     {
         switch (command[0])
         {
-            case "getagentinfo":
-                if (command.Length == 4)
+            case "execute":
+                if (command.Length == 4 || command.Length == 3)
                 {
                     var values = new Dictionary<string, string> {
                         { "nodeId", command[1] },
                         { "command", command[2] },
-                        { "payload", command[3] }
+                        { "payload", (command.Length == 4) ? command[3] : ""}
                     };
 
                     var content = new FormUrlEncodedContent(values);
@@ -36,7 +36,7 @@ class CommandHandler
                     return response.Content.ReadAsStringAsync().Result;
                 }
 
-                return "Command incomplete";
+                return "Incorrect syntax: [execute nodeID command payload]";
 
             case "servers":
                 var result = client.GetStringAsync("https://localhost:7238/api/server/online").Result;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using Newtonsoft.Json;
+using Agent.Commands;
 
 namespace Agent
 {
@@ -51,13 +52,13 @@ namespace Agent
                 if (command == null)
                     return;
 
-                string responsePayload = "temp";
+                
 
                 var response = JsonConvert.SerializeObject(new
                 {
                     requestId = command.RequestId,
                     success = true,
-                    payload = responsePayload
+                    payload = CommandHandler.Execute(command).Result
                 });
 
                 await SendAsync(socket, response);
