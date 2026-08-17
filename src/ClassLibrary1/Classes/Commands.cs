@@ -6,7 +6,8 @@ namespace Shared.Classes.Commands;
 
 public enum CommandType
 {
-    Print
+    Ping,
+    GetStatus
 }
 
 public record AgentCommand
