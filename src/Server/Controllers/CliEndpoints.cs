@@ -31,7 +31,10 @@ public class ServerController : ControllerBase
     }
 
     [HttpPost("execute")]
-    public async Task<IActionResult> SendCommand(string nodeId, string command, string? payload)
+    public async Task<IActionResult> SendCommand(
+        [FromForm] string nodeId,
+        [FromForm] string command,
+        [FromForm] string? payload)
     {
         if (!AgentWebSocketHandler.IsAgentConnected(nodeId))
             return NotFound("agent offline");

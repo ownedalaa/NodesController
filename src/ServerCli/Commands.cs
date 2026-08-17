@@ -1,5 +1,9 @@
-﻿using System.Net.Http;
+﻿using System.Text;
+using System.Net.Http;
+
 using Shared.Models;
+using System.Text.Json;
+//using Newtonsoft.Json;
 
 namespace ServerCli.Commands;
 
@@ -35,7 +39,17 @@ class CommandHandler
                 return "Command incomplete";
 
             case "servers":
-                return client.GetStringAsync("https://localhost:7238/api/server/online").Result;
+                var result = client.GetStringAsync("https://localhost:7238/api/server/online").Result;
+
+                List<string>? lista = JsonSerializer.Deserialize<List<string>>(result);
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var item in lista)
+                {
+                    sb.Append(item.ToString() + " ");
+                }
+
+                return (sb.ToString() is null) ? "" : sb.ToString();
 
             case "help":
                 return "Available commands: help, exit, clear, servers";
