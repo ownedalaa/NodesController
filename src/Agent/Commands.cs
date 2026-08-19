@@ -17,7 +17,10 @@ class CommandHandler
         switch (ac.Command)
         {
             case "ping":
-                return "pong";
+                return "Pong!";
+
+            //case "":
+            //    return "";
 
             default:
                 return "Command not found";
